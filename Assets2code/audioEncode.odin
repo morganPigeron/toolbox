@@ -6,24 +6,24 @@ import "core:os"
 import "core:path/filepath"
 import "core:strings"
 
-font_encode :: proc(ttf_to_encode: string) -> encode_result {
+audio_encode :: proc(audio_to_encode: string) -> encode_result {
 	result := encode_result {
 		result = "",
 		ok     = false,
 	}
 
-	content, ok := os.read_entire_file_from_filename(ttf_to_encode)
+	content, ok := os.read_entire_file_from_filename(audio_to_encode)
 	defer delete(content)
 
 	if !ok {
-		log.errorf("cannot read file: %v", ttf_to_encode)
+		log.errorf("cannot read file: %v", audio_to_encode)
 		return result
 	}
 
 	sb := strings.builder_make()
 
-	strings.write_string(&sb, "package font\n")
-	strings.write_string(&sb, filepath.short_stem(ttf_to_encode))
+	strings.write_string(&sb, "package audio\n")
+	strings.write_string(&sb, filepath.short_stem(audio_to_encode))
 	strings.write_string(&sb, " := [?]byte {\n")
 
 	for b, i in content {

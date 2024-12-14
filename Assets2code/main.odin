@@ -5,6 +5,7 @@ import "core:log"
 import "core:mem"
 import "core:os"
 import "core:path/filepath"
+import "core:strings"
 
 encode_result :: struct {
 	result: string,
@@ -50,7 +51,33 @@ main :: proc() {
 	case ".png":
 		result = image_encode(asset_path)
 		break
+	case ".wav":
+		fallthrough
+	case ".ogg":
+		fallthrough
+	case ".mp3":
+		fallthrough
+	case ".qoa":
+		fallthrough
+	case ".flac":
+		fallthrough
+	case ".xm":
+		fallthrough
+	case ".mod":
+		result = audio_encode(asset_path)
 	}
 
 	fmt.printfln("%v", result.result)
+}
+
+print_padded :: proc(sb: ^strings.Builder, b: byte) {
+	if b >= 100 {
+		strings.write_string(sb, " ")
+	} else if b >= 10 && b < 100 {
+		strings.write_string(sb, "  ")
+	} else {
+		strings.write_string(sb, "   ")
+	}
+	strings.write_string(sb, fmt.tprintf("%v", b))
+	strings.write_string(sb, ",")
 }
